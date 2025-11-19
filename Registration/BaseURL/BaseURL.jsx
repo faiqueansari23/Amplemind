@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://qaswatechnologies.com/anti_theft/public/api/';
+const API_BASE_URL = 'https://ashhari.com/bbn/public/api/';
 
 const API_ENDPOINTS = {
 

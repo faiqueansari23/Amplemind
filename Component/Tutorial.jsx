@@ -139,24 +139,40 @@
 
 
 
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { WebView } from 'react-native-webview';  
+// import React from 'react';
+// import { StyleSheet, View } from 'react-native';
+// import { WebView } from 'react-native-webview';  
+// const Tutorial = () => {
+//   return (
+//     <View style={styles.container}>
+//       <WebView 
+//         source={{ uri: 'http://kodingstreet.com/tutorial/' }} 
+//         style={{ flex: 1 }} 
+//       />
+//     </View>
+//   );
+// };
+
+// export default Tutorial;
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//   },
+// });
+
+
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+
 const Tutorial = () => {
   return (
-    <View style={styles.container}>
-      <WebView 
-        source={{ uri: 'http://kodingstreet.com/tutorial/' }} 
-        style={{ flex: 1 }} 
-      />
+    <View>
+      <Text>Tutorial</Text>
     </View>
-  );
-};
+  )
+}
 
-export default Tutorial;
+export default Tutorial
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+const styles = StyleSheet.create({})

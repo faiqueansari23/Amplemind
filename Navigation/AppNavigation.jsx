@@ -3,11 +3,11 @@ import { ActivityIndicator, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import AppDrawer from './AppDrawer';
 import SignUp from '../Registration/SignUp';
-import LanguageTechnologies from '../Exam/LanguageTechnologies';
-import Contact from '../Component/Contact';
+import Subcategories from '../Exam/Subcategories';
+import Contact from '../Component/Contact';   
+import AboutUs from '../Component/AboutUs';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,8 +46,10 @@ function AppNavigator() {
         <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
         <Stack.Screen name="AppDrawer" component={AppDrawer} options={{ headerShown: false }} />
-        <Stack.Screen name="LanguageTechnologies" component={LanguageTechnologies} options={{ headerShown: false }} />
+        <Stack.Screen name="Subcategories" component={Subcategories} options={{ headerShown: false }} />
         <Stack.Screen name="Contact" component={Contact} options={{ headerShown: false }} />
+        <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -59,8 +61,3 @@ export default AppNavigator;
 
 
 
-// import Home from '../Component/Home';
-// import Course from '../Component/Course';
-
- {/* <Stack.Screen name="Mernstack" component={Mernstack} options={{headerShown:false}}/> */}
-      {/* <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/> */}

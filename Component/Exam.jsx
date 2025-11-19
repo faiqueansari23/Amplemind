@@ -1,81 +1,69 @@
-import React, { useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-
-// Import Images
-import LanguageTech from '../course_img/LanguageTech.png';
-import mern from '../course_img/MERN.png';
-import java from '../course_img/java.png';
-import datascience from '../course_img/data_science.png';
-import dataanalytics from '../course_img/data_analytics.png';
-import devops from '../course_img/devops.png';
-import civil from '../course_img/civil.jpg';
-import electrical from '../course_img/electrical.jpg';
-import mechanical from '../course_img/mechanical.jpg';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import ENDPOINTS from '../BaseURL/BaseURL';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Exam() {
   const navigation = useNavigation();
+  const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    console.log("Courses Component Loaded");
-  }, []);
+   useEffect(() => {
+  const fetchCategoriesWithToken = async () => {
+    try {
+      const storedUser = await AsyncStorage.getItem('userDetails');
+      const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+
+      if (parsedUser && parsedUser.token) {
+        const response = await axios.get(ENDPOINTS.CATEGORIES, {
+          headers: {
+            Authorization: `Bearer ${parsedUser.token}`,
+          },
+        });
+
+        console.log('Fetched Categories:', response.data);
+        setCategories(response.data);
+      } else {
+        console.error('User token not found');
+      }
+    } catch (error) {
+      console.error('API Error:', error.message);
+    }
+  };
+
+  fetchCategoriesWithToken();
+}, []);
 
   return (
     <ScrollView style={styles.container}>
-      {/* IT Courses Section */}
       <View style={styles.sectionContainer}>
         <Text style={styles.headerText}>Examination</Text>
         <View style={styles.cardRow}>
-          <CourseCard
-            imageSource={LanguageTech}
-            title="Language Technologies"
-            onPress={() => navigation.navigate('LanguageTechnologies')}
-          />
-          <CourseCard
-            imageSource={mern}
-            title="FULL STACK DEVELOPMENT"
-            onPress={() => navigation.navigate('Mernstack')}
-          />
-          <CourseCard
-            imageSource={java}
-            title="JAVA"
-            onPress={() => navigation.navigate('Java')}
-          />
-          <CourseCard
-            imageSource={datascience}
-            title="DATA SCIENCE"
-            onPress={() => navigation.navigate('Datascience')}
-          />
-          <CourseCard
-            imageSource={dataanalytics}
-            title="DATA ANALYTICS"
-            onPress={() => navigation.navigate('Dataanalytics')}
-          />
-          <CourseCard
-            imageSource={devops}
-            title="DEVOPS"
-            onPress={() => navigation.navigate('Devops')}
-          />
+          {categories.map(category => (
+            <CourseCard
+              key={category.id}
+              imageSource={{uri: category.category_image_url}}
+              title={category.category_name}
+              onPress={() => {
+                navigation.navigate('Subcategories', {categoryId: category.id});
+              }}
+            />
+          ))}
         </View>
       </View>
-
-      {/* Non-IT Courses Section */}
-      {/* <View style={styles.sectionContainer}>
-        <Text style={styles.headerText}>Non-IT Courses</Text>
-        <View style={styles.cardRow}>
-          <CourseCard imageSource={civil} title="CIVIL CADD" />
-          <CourseCard imageSource={electrical} title="ELECTRICAL CADD" />
-          <CourseCard imageSource={mechanical} title="MECHANICAL CADD" />
-        </View>
-      </View> */}
-
-
-      
     </ScrollView>
   );
 }
 
-function CourseCard({ imageSource, title, onPress }) {
+function CourseCard({imageSource, title, onPress}) {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image source={imageSource} style={styles.cardImage} />
@@ -87,55 +75,52 @@ function CourseCard({ imageSource, title, onPress }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000', // Black Background
+    backgroundColor: '#000000',
   },
   sectionContainer: {
     marginVertical: 20,
-    paddingHorizontal: 15, // Added padding for better alignment
+    paddingHorizontal: 15,
   },
   headerText: {
     fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 25,
-    color: '#FFD700', // Yellow Color
-    textTransform: 'uppercase', // Header in uppercase
-    letterSpacing: 1.5, // More spacing for better look
+    color: '#FFD700',
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
   },
   cardRow: {
-    flexDirection: 'column', // Cards are stacked vertically
-    alignItems: 'center', // Center each card in the row
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   card: {
-    width: '90%', // Make the card take almost full width
-    height: 250, // Increase card height
-    backgroundColor: '#111111', // Dark Gray
-    borderRadius: 20, // Larger radius for modern look
-    marginVertical: 15, // More spacing between cards
+    width: '90%',
+    height: 250,
+    backgroundColor: '#111111',
+    borderRadius: 20,
+    marginVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 20, // Deeper shadow
-    shadowColor: '#FFD700', // Bright Yellow Glow
-    shadowOffset: { width: 6, height: 6 }, // Shadow on bottom and right only
-    shadowOpacity: 0.6, // Increased shadow visibility
-    shadowRadius: 15, // Larger radius for a more diffused glow
+    elevation: 20,
+    shadowColor: '#FFD700',
+    shadowOffset: {width: 6, height: 6},
+    shadowOpacity: 0.6,
+    shadowRadius: 15,
   },
   cardImage: {
-    width: '80%', // Use more of the card space for image
+    width: '80%',
     height: 120,
     resizeMode: 'contain',
     borderRadius: 12,
     marginBottom: 15,
   },
   cardText: {
-    fontSize: 18, // Larger font size for better readability
+    fontSize: 18,
     fontWeight: '700',
-    color: '#FFD700', // Yellow Text
+    color: '#FFD700',
     textAlign: 'center',
   },
 });
 
-export default Exam
-
-
-
+export default Exam;

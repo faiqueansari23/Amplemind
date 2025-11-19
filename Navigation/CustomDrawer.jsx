@@ -95,7 +95,227 @@
 
 // export default CustomDrawer;
 
-import React from 'react';
+// import React, {useEffect, useState} from 'react';
+// import {
+//   View,
+//   Text,
+//   TouchableOpacity,
+//   Image,
+//   StyleSheet,
+//   ScrollView,
+//   Alert,
+// } from 'react-native';
+// import Svg, {Path} from 'react-native-svg';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import axios from 'axios';
+// import ENDPOINTS from '../BaseURL/BaseURL';
+// import {launchImageLibrary} from 'react-native-image-picker';
+
+// const CustomDrawer = ({navigation}) => {
+//   const [user, setUser] = useState({name: '', email: ''});
+//   const [profileImage, setProfileImage] = useState(null);
+
+//   // Fetch user data on component mount
+//   useEffect(() => {
+//     const fetchUserDetails = async () => {
+//       try {
+//         const storedUser = await AsyncStorage.getItem('userDetails');
+//         console.log('Stored User:', storedUser);
+//         const parsedUser = JSON.parse(storedUser);
+//         console.log(
+//           'Fetching from:',
+//           ENDPOINTS.GET_STUDENT_BY_ID(parsedUser.id),
+//         );
+
+//         if (parsedUser && parsedUser.id) {
+//           const response = await axios.get(
+//             ENDPOINTS.GET_STUDENT_BY_ID(parsedUser.id),
+//           );
+
+//           console.log('API Response:', response.data);
+
+//           setUser({
+//             name: response.data.student.student_name,
+//             email: response.data.student.email,
+//             Course: response.data.student.Course,
+//           });
+//         }
+//       } catch (error) {
+//         console.error('Error fetching user details:', error);
+//         Alert.alert('Error', 'Unable to load user info.');
+//       }
+//     };
+
+//     fetchUserDetails();
+//   }, []);
+
+//   const handleLogout = async () => {
+//     try {
+//       await AsyncStorage.removeItem('userDetails');
+//       Alert.alert('Success', 'Logout successful! 🚀');
+//       navigation.replace('SignUp');
+//     } catch (error) {
+//       console.error('Logout error:', error);
+//       Alert.alert('Error', 'Logout failed, please try again.');
+//     }
+//   };
+
+//   // Function to open gallery
+//   const selectImage = () => {
+//     launchImageLibrary({mediaType: 'photo'}, response => {
+//       if (response.didCancel) {
+//         console.log('User cancelled image picker');
+//       } else if (response.errorCode) {
+//         console.log('ImagePicker Error: ', response.errorMessage);
+//       } else {
+//         const uri = response.assets[0].uri;
+//         setProfileImage(uri);
+//         // Optionally save to AsyncStorage here
+//       }
+//     });
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <View style={styles.header}>
+//         <Image
+//           source={require('../image/kodingstreet-logo.png')}
+//           style={styles.logo}
+//           resizeMode="contain"
+//         />
+
+//       </View>
+
+//       {/* Profile Section */}
+//       <View style={styles.profileSection}>
+//         {/* <Image
+//           source={require('../images/contactimagee.png')}
+//           style={styles.profilePic}
+//         /> */}
+//         <TouchableOpacity onPress={selectImage}>
+//           <Image
+//             source={
+//               profileImage
+//                 ? {uri: profileImage}
+//                 : require('../images/contactimagee.png')
+//             }
+//             style={styles.profilePic}
+//           />
+//         </TouchableOpacity>
+//         <View>
+//           <Text style={styles.userName}>{user.name || 'Loading...'}</Text>
+//           <Text style={styles.userEmail}>{user.email || 'Loading...'}</Text>
+//           <Text style={styles.userEmail}>{user.Course || 'Loading...'}</Text>
+//         </View>
+//       </View>
+
+//       <ScrollView contentContainerStyle={styles.menu}>
+//         <TouchableOpacity
+//           style={styles.menuItem}
+//           onPress={() => navigation.navigate('Contact')}>
+//           <Text style={styles.menuText}>Contact Us</Text>
+//         </TouchableOpacity>
+
+//         <TouchableOpacity
+//           style={styles.menuItem}
+//           onPress={() => navigation.navigate('Amplemind', {screen: 'Course'})}>
+//           <Text style={styles.menuText}>Course</Text>
+//         </TouchableOpacity>
+
+//         <TouchableOpacity
+//           style={styles.menuItem}
+//           onPress={() => navigation.navigate('AboutUs')}>
+//           <Text style={styles.menuText}>About Us</Text>
+//         </TouchableOpacity>
+
+//         <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
+//           <Text style={styles.menuText}>Logout</Text>
+//         </TouchableOpacity>
+//       </ScrollView>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#000',
+//   },
+//   header: {
+//     // backgroundColor: '#fff',
+//     paddingTop: 40,
+//     alignItems: 'center',
+//     borderBottomLeftRadius: 40,
+//     borderBottomRightRadius: 40,
+//   },
+//   logo: {
+//     width: 220,
+//     height: 45,
+//   },
+//   // wave: {
+//   //   marginTop: -15,
+//   // },
+//   profileSection: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     // backgroundColor: '#ffffff',
+//     marginLeft: 7,
+//     marginRight:20,
+//     marginTop:20,
+//     marginBottom:20,
+//     padding: 5,
+//     borderRadius: 16,
+//     elevation: 4,
+//     shadowColor: '#000',
+//     shadowOpacity: 0.1,
+//     shadowOffset: {width: 0, height: 2},
+//   },
+//   profilePic: {
+//     width: 50,
+//     height: 50,
+//     borderRadius: 25,
+//     marginRight: 15,
+//   },
+//   userName: {
+//     fontSize: 16,
+//     fontWeight: '700',
+//     color: '#666',
+//   },
+//   userEmail: {
+//     fontSize: 14,
+//     color: '#666',
+//   },
+//   menu: {
+//     paddingHorizontal: 20,
+//     paddingTop: 10,
+//   },
+//   menuItem: {
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#1c1c1e', // Sleek dark tone
+//     paddingVertical: 14,
+//     paddingHorizontal: 20,
+//     borderRadius: 12,
+//     marginBottom: 12,
+//     borderWidth: 1,
+//     borderColor: '#2ec4a5', // Accent border
+//     shadowColor: '#2ec4a5',
+//     shadowOpacity: 0.2,
+//     shadowOffset: {width: 0, height: 4},
+//     shadowRadius: 6,
+//     elevation: 3,
+//   },
+//   menuText: {
+//     color: '#2ec4a5',
+//     fontSize: 16,
+//     fontWeight: '700',
+//   },
+// });
+
+// export default CustomDrawer;
+
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -107,12 +327,84 @@ import {
 } from 'react-native';
 import Svg, {Path} from 'react-native-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import ENDPOINTS from '../BaseURL/BaseURL';
+import {launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const CustomDrawer = ({navigation}) => {
-  // Logout
+  const [user, setUser] = useState({id: '', name: '', email: ''}); // 👈 Added id
+  const [profileImage, setProfileImage] = useState(null); // 👈 ADDED
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const storedUser = await AsyncStorage.getItem('userDetails');
+        // console.log('Stored User:', storedUser);
+        const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+
+        if (parsedUser && parsedUser.id) {
+          // console.log('Fetching from:', ENDPOINTS.GET_STUDENT_BY_ID(parsedUser.id));
+          const response = await axios.get(
+            ENDPOINTS.GET_STUDENT_BY_ID(parsedUser.id),
+            {
+              headers: {
+                Authorization: `Bearer ${parsedUser.token}`, 
+              },
+            },
+          );
+
+          // console.log('API Response:', response.data);
+
+          setUser({
+            id: parsedUser.id,
+            name: response.data.student.student_name,
+            email: response.data.student.email,
+            Course: response.data.student.Course,
+          });
+
+          // Load saved profile image
+          const imageUri = await AsyncStorage.getItem(
+            `profileImage_${parsedUser.id}`,
+          );
+          if (imageUri) {
+            setProfileImage(imageUri);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+        Alert.alert('Error', 'Unable to load user info.');
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
+
+  // Image Picker Function
+  const selectImage = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: true,
+        cropperCircleOverlay: true,
+        compressImageQuality: 0.8,
+      });
+
+      if (image && image.path) {
+        setProfileImage(image.path);
+        await AsyncStorage.setItem(`profileImage_${user.id}`, image.path);
+      }
+    } catch (error) {
+      console.log('Image pick error:', error);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('userDetails');
+      await AsyncStorage.removeItem(`profileImage_${user.id}`); // 👈 Remove user's saved image
       Alert.alert('Success', 'Logout successful! 🚀');
       navigation.replace('SignUp');
     } catch (error) {
@@ -123,65 +415,55 @@ const CustomDrawer = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {/* Header with Logo */}
       <View style={styles.header}>
         <Image
           source={require('../image/kodingstreet-logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
-        {/* <Svg height="60" width="100%" viewBox="0 0 1440 320" style={styles.wave}>
-          <Path
-            fill="#2ec4a5"
-            d="M0,64L60,85.3C120,107,240,149,360,154.7C480,160,600,128,720,106.7C840,85,960,75,1080,96C1200,117,1320,171,1380,197.3L1440,224V320H0Z"
-          />
-        </Svg> */}
       </View>
 
-      {/* User Profile */}
+      {/* Profile Section */}
       <View style={styles.profileSection}>
-        <Image
-          source={require('../images/contactimagee.png')}
-          style={styles.profilePic}
-        />
+        <TouchableOpacity onPress={selectImage}>
+          <Image
+            source={
+              profileImage
+                ? {uri: profileImage}
+                : require('../images/contactimagee.png')
+            }
+            style={styles.profilePic}
+          />
+        </TouchableOpacity>
         <View>
-          <Text style={styles.userName}>Salman Khan</Text>
-          <Text style={styles.userEmail}>kodingstreet@gmail.com</Text>
+          <Text style={styles.userName}>{user.name || 'Loading...'}</Text>
+          <Text style={styles.userEmail}>{user.email || 'Loading...'}</Text>
+          <Text style={styles.userEmail}>{user.Course || 'Loading...'}</Text>
         </View>
       </View>
 
-      {/* Drawer Buttons */}
       <ScrollView contentContainerStyle={styles.menu}>
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => navigation.navigate('LogIn')}>
-          <Text style={styles.menuText}>Home</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.menuItem}
           onPress={() => navigation.navigate('Contact')}>
           <Text style={styles.menuText}>Contact Us</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('Amplemind', {screen: 'Course'})}>
           <Text style={styles.menuText}>Course</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('AboutUs')}>
           <Text style={styles.menuText}>About Us</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
           <Text style={styles.menuText}>Logout</Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity
-         style={styles.menuItem}
-         onPress={() => navigation.navigate('SignUp')}
-         >
-          <Text style={styles.menuText}>SignUp</Text>
-        </TouchableOpacity> */}
       </ScrollView>
     </View>
   );
@@ -193,7 +475,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
   header: {
-    // backgroundColor: '#fff',
     paddingTop: 40,
     alignItems: 'center',
     borderBottomLeftRadius: 40,
@@ -203,14 +484,10 @@ const styles = StyleSheet.create({
     width: 220,
     height: 45,
   },
-  // wave: {
-  //   marginTop: -15,
-  // },
   profileSection: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    // backgroundColor: '#ffffff',
-    margin: 20,
+    margin: 10,
     padding: 15,
     borderRadius: 16,
     elevation: 4,
@@ -219,41 +496,48 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
   },
   profilePic: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 15,
+    width: 75,
+    height: 75,
+    borderRadius: 50,
+    marginBottom: 10,
   },
   userName: {
     fontSize: 16,
     fontWeight: '700',
     color: '#666',
+    alignSelf: 'center',
   },
   userEmail: {
     fontSize: 14,
     color: '#666',
+    alignSelf: 'center',
   },
   menu: {
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     paddingTop: 10,
   },
   menuItem: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1c1c1e', // Sleek dark tone
+    // backgroundColor: '#1c1c1e',
     paddingVertical: 14,
     paddingHorizontal: 20,
-    borderRadius: 12,
+    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderColor: '#2ec4a5',
+    borderRadius: 0, // Optional: Remove rounding if not needed
     marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#2ec4a5', // Accent border
-    shadowColor: '#2ec4a5',
+    width: '100%', // 👈 Full width
+    // shadowColor: '#2ec4a5',
     shadowOpacity: 0.2,
     shadowOffset: {width: 0, height: 4},
     shadowRadius: 6,
     elevation: 3,
   },
+
   menuText: {
     color: '#2ec4a5',
     fontSize: 16,
